@@ -56,24 +56,22 @@ int strlen(const char *s) {
 }
 
 void scroll_up() {
-    // Copy every row to the one above
     for (int row = 1; row < VGA_HEIGHT; row++) {
         for (int col = 0; col < VGA_WIDTH; col++) {
             volatile char* src = vga_addr(col, row);
             volatile char* dst = vga_addr(col, row - 1);
-            dst[0] = src[0];         // copy character
-            dst[1] = src[1];         // copy attribute
+            dst[0] = src[0];         
+            dst[1] = src[1];         
         }
     }
 
-    // Clear the last row
     for (int col = 0; col < VGA_WIDTH; col++) {
         volatile char* p = vga_addr(col, VGA_HEIGHT - 1);
         p[0] = ' ';
         p[1] = VGA_ATTR(VGA_LIGHT_GREY, VGA_BLACK);
     }
 
-    cursor_y = VGA_HEIGHT - 1; // move cursor to last row
+    cursor_y = VGA_HEIGHT - 1; 
 }
 
 
@@ -92,7 +90,6 @@ void printchar(const char c) {
         cursor_y++;
     }
 
-    // wrap vertically (scrolling needed, but omitted for now)
     if (cursor_y >= VGA_HEIGHT) {
       scroll_up();
     }
